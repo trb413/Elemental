@@ -916,4 +916,63 @@ void Trsm
 } // namespace blas
 } // namespace El
 
+
+#if defined(EL_USE_CUBLAS)
+
+namespace El {
+
+#ifdef EL_USE_64BIT_BLAS_INTS
+typedef long long int BlasInt;
+#else
+typedef int BlasInt;
+#endif
+
+namespace cublas {
+
+// NOTE: templated routines are custom and not wrappers
+
+// Level 3 BLAS
+// ============
+template<typename T>
+void Gemm
+( char transA, char transB, BlasInt m, BlasInt n, BlasInt k,
+  const T& alpha,
+  const T* A, BlasInt ALDim, 
+  const T* B, BlasInt BLDim,
+  const T& beta,
+        T* C, BlasInt CLDim );
+
+void Gemm
+( char transA, char transB, BlasInt m, BlasInt n, BlasInt k,
+  const float& alpha,
+  const float* A, BlasInt ALDim, 
+  const float* B, BlasInt BLDim,
+  const float& beta,
+        float* C, BlasInt CLDim );
+void Gemm
+( char transA, char transB, BlasInt m, BlasInt n, BlasInt k,
+  const double& alpha,
+  const double* A, BlasInt ALDim, 
+  const double* B, BlasInt BLDim,
+  const double& beta,
+        double* C, BlasInt CLDim );
+void Gemm
+( char transA, char transB, BlasInt m, BlasInt n, BlasInt k,
+  const scomplex& alpha,
+  const scomplex* A, BlasInt ALDim, 
+  const scomplex* B, BlasInt BLDim,
+  const scomplex& beta,
+        scomplex* C, BlasInt CLDim );
+void Gemm
+( char transA, char transB, BlasInt m, BlasInt n, BlasInt k,
+  const dcomplex& alpha,
+  const dcomplex* A, BlasInt ALDim, 
+  const dcomplex* B, BlasInt BLDim,
+  const dcomplex& beta,
+        dcomplex* C, BlasInt CLDim );
+
+} // namespace cublas
+} // namespace El
+#endif
+
 #endif // ifndef EL_IMPORTS_BLAS_DECL_HPP

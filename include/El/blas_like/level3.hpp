@@ -31,6 +31,10 @@ enum GemmAlgorithm {
 }
 using namespace GemmAlgorithmNS;
 
+void GemmUseGPU(int min_M, int min_N, int min_K);
+
+void GemmUseCPU();
+
 template<typename T>
 void Gemm
 ( Orientation orientA, Orientation orientB,

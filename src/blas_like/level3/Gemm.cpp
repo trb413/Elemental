@@ -16,6 +16,20 @@
 
 namespace El {
 
+char gemm_cpu_gpu_switch = 'c';
+int min_M = 0, min_N = 0, min_K = 0;
+
+void GemmUseGPU(int _min_M, int _min_N, int _min_K) {
+   gemm_cpu_gpu_switch = 'g';
+   min_M = _min_M;
+   min_N = _min_N;
+   min_K = _min_K;
+}
+
+void GemmUseCPU() {
+   gemm_cpu_gpu_switch = 'c';
+}
+
 template<typename T>
 void Gemm
 ( Orientation orientA, Orientation orientB,
@@ -59,11 +73,30 @@ void Gemm
     const Int k = ( orientA == NORMAL ? A.Width() : A.Height() );
     if( k != 0 )
     {
+#if defined(EL_USE_CUBLAS)
+        if (gemm_cpu_gpu_switch == 'g' && 
+            m >= min_M &&
+            n >= min_N &&
+            k >= min_K) {
+          cublas::Gemm
+          ( transA, transB, m, n, k,
+            alpha, A.LockedBuffer(), A.LDim(),
+                   B.LockedBuffer(), B.LDim(),
+            beta,  C.Buffer(),       C.LDim() );
+        } else {
+          blas::Gemm
+          ( transA, transB, m, n, k,
+            alpha, A.LockedBuffer(), A.LDim(),
+                   B.LockedBuffer(), B.LDim(),
+            beta,  C.Buffer(),       C.LDim() );
+        }
+#else
         blas::Gemm
         ( transA, transB, m, n, k,
           alpha, A.LockedBuffer(), A.LDim(),
                  B.LockedBuffer(), B.LDim(),
           beta,  C.Buffer(),       C.LDim() );
+#endif
     }
     else
     {
