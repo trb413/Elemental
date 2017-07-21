@@ -76,6 +76,8 @@ void TransposeAxpy
     }
 }
 
+#ifdef TOM_SAYS_STAY
+
 template<typename T,typename S>
 void TransposeAxpy
 (       S alphaS,
@@ -96,6 +98,8 @@ void TransposeAxpy
     }
     Y.ProcessQueues();
 }
+
+#endif /* TOM_SAYS_STAY */
 
 template<typename T,typename S>
 void TransposeAxpy
@@ -131,6 +135,8 @@ void TransposeAxpy
         TransposeAxpy( alpha, C->LockedMatrix(), B.Matrix(), conjugate );
     }
 }
+
+#ifdef TOM_SAYS_STAY
 
 template<typename T,typename S>
 void TransposeAxpy
@@ -186,6 +192,8 @@ void AdjointAxpy
     TransposeAxpy( alphaS, X, Y, true );
 }
 
+#endif /* TOM_SAYS_STAY */
+
 #ifdef EL_INSTANTIATE_BLAS_LEVEL1
 # define EL_EXTERN
 #else
@@ -202,7 +210,10 @@ void AdjointAxpy
   (       S alpha, \
     const ElementalMatrix<T>& A, \
           ElementalMatrix<T>& B, \
-          bool conjugate ); \
+          bool conjugate );
+
+#ifdef TOM_SAYS_STAY
+                                                \
   EL_EXTERN template void TransposeAxpy \
   (       S alpha, \
     const SparseMatrix<T>& A, \
@@ -229,6 +240,8 @@ void AdjointAxpy
   (       S alpha, \
     const DistSparseMatrix<T>& A, \
           DistSparseMatrix<T>& B );
+
+#endif /* TOM_SAYS_STAY */
 
 #define PROTO_INT(T) PROTO_TYPES(T,T)
 

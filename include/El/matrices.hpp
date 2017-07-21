@@ -14,6 +14,8 @@ namespace El {
 // Deterministic
 // #############
 
+#ifdef TOM_SAYS_STAY
+
 // Classical
 // =========
 
@@ -52,6 +54,8 @@ void Circulant( AbstractDistMatrix<T>& A, const Matrix<T>& a );
 template<typename T>
 void Circulant( AbstractDistMatrix<T>& A, const vector<T>& a );
 
+#endif /* TOM_SAYS_STAY */
+
 // Diagonal
 // --------
 template<typename S,typename T>
@@ -64,6 +68,8 @@ template<typename S,typename T>
 void Diagonal( AbstractDistMatrix<S>& D, const Matrix<T>& d );
 template<typename S,typename T>
 void Diagonal( AbstractDistMatrix<S>& D, const AbstractDistMatrix<T>& d );
+
+#ifdef TOM_SAYS_STAY
 
 template<typename S,typename T>
 void Diagonal( SparseMatrix<S>& D, const Matrix<T>& d );
@@ -167,12 +173,17 @@ void Walsh( Matrix<T>& A, Int k, bool binary=false );
 template<typename T>
 void Walsh( AbstractDistMatrix<T>& A, Int k, bool binary=false );
 
+#endif /* TOM_SAYS_STAY */
+
 // Zeros
 // -----
 template<typename T>
 void Zeros( Matrix<T>& A, Int m, Int n );
 template<typename T>
 void Zeros( AbstractDistMatrix<T>& A, Int m, Int n );
+
+#ifdef TOM_SAYS_STAY
+
 template<typename T>
 void Zeros( SparseMatrix<T>& A, Int m, Int n );
 template<typename T>
@@ -609,6 +620,8 @@ void Whale( AbstractDistMatrix<Complex<Real>>& A, Int n );
 template<typename Real>
 void NTRUAttack( Matrix<Real>& A, const Matrix<Real>& h, Real alpha, Real q );
 
+#endif /* TOM_SAYS_STAY */
+
 // Random
 // ######
 
@@ -630,9 +643,14 @@ void MakeGaussian
 template<typename Field>
 void MakeGaussian
 ( AbstractDistMatrix<Field>& A, Field mean=0, Base<Field> stddev=1 );
+
+#ifdef TOM_SAYS_STAY
+
 template<typename Field>
 void MakeGaussian
 ( DistMultiVec<Field>& A, Field mean=0, Base<Field> stddev=1 );
+
+#endif /* TOM_SAYS_STAY */
 
 template<typename Field>
 void Gaussian
@@ -642,10 +660,15 @@ template<typename Field>
 void Gaussian
 ( AbstractDistMatrix<Field>& A, Int m, Int n,
   Field mean=0, Base<Field> stddev=1 );
+
+#ifdef TOM_SAYS_STAY
+
 template<typename Field>
 void Gaussian
 ( DistMultiVec<Field>& A, Int m, Int n,
   Field mean=0, Base<Field> stddev=1 );
+
+#endif /* TOM_SAYS_STAY */
 
 // Rademacher
 // ----------
@@ -668,14 +691,17 @@ template<typename T>
 void MakeUniform( Matrix<T>& A, T center=0, Base<T> radius=1 );
 template<typename T>
 void MakeUniform( AbstractDistMatrix<T>& A, T center=0, Base<T> radius=1 );
-template<typename T>
-void MakeUniform( DistMultiVec<T>& X, T center=0, Base<T> radius=1 );
 
 template<typename T>
 void Uniform( Matrix<T>& A, Int m, Int n, T center=0, Base<T> radius=1 );
 template<typename T>
 void Uniform
 ( AbstractDistMatrix<T>& A, Int m, Int n, T center=0, Base<T> radius=1 );
+
+#ifdef TOM_SAYS_STAY
+
+template<typename T>
+void MakeUniform( DistMultiVec<T>& X, T center=0, Base<T> radius=1 );
 template<typename T>
 void Uniform( DistMultiVec<T>& X, Int m, Int n, T center=0, Base<T> radius=1 );
 
@@ -778,11 +804,16 @@ void Wigner
 template<typename Field>
 void Wigner
 ( ElementalMatrix<Field>& A, Int n, Field mean=0, Base<Field> stddev=1 );
+#endif /* TOM_SAYS_STAY */
 
 } // namespace El
+
+#ifdef TOM_SAYS_STAY
 
 // TODO(poulson): Group these into a small number of includes of parent dir's
 #include <El/matrices/deterministic/classical/Circulant.hpp>
 #include <El/matrices/deterministic/lattice/NTRUAttack.hpp>
+
+#endif /* TOM_SAYS_STAY */
 
 #endif // ifndef EL_MATRICES_HPP

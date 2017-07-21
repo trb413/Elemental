@@ -28,6 +28,7 @@ void Zeros( AbstractDistMatrix<T>& A, Int m, Int n )
     Zero( A );
 }
 
+#ifdef TOM_SAYS_STAY
 template<typename T>
 void Zeros( SparseMatrix<T>& A, Int m, Int n )
 {
@@ -51,13 +52,18 @@ void Zeros( DistMultiVec<T>& A, Int m, Int n )
     A.Resize( m, n );
     Zero( A );
 }
+#endif /* TOM_SAYS_STAY */
 
 #define PROTO(T) \
   template void Zeros( Matrix<T>& A, Int m, Int n ); \
-  template void Zeros( AbstractDistMatrix<T>& A, Int m, Int n ); \
+  template void Zeros( AbstractDistMatrix<T>& A, Int m, Int n );
+
+#ifdef TOM_SAYS_STAY
+                                                                \
   template void Zeros( SparseMatrix<T>& A, Int m, Int n ); \
   template void Zeros( DistSparseMatrix<T>& A, Int m, Int n ); \
   template void Zeros( DistMultiVec<T>& A, Int m, Int n );
+#endif /* TOM_SAYS_STAY */
 
 #define EL_ENABLE_DOUBLEDOUBLE
 #define EL_ENABLE_QUADDOUBLE

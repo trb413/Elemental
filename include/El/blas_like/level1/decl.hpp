@@ -11,6 +11,8 @@
 
 namespace El {
 
+#ifdef TOM_SAYS_STAY
+
 // TODO(poulson):
 // More 'Contract' routines, e.g., {Contract,ContractedAxpy},
 // which sum results over the teams of processes that shared data in the
@@ -74,6 +76,8 @@ void AdjointAxpyContract
 ( Ring alpha, const BlockMatrix<Ring>& A,
                     BlockMatrix<Ring>& B );
 
+#endif /* TOM_SAYS_STAY */
+
 // AllReduce
 // =========
 template<typename T>
@@ -94,6 +98,9 @@ template<typename Ring1,typename Ring2>
 void Axpy
 ( Ring2 alpha, const AbstractDistMatrix<Ring1>& X,
                      AbstractDistMatrix<Ring1>& Y );
+
+#ifdef TOM_SAYS_STAY
+
 template<typename Ring1,typename Ring2>
 void Axpy
 ( Ring2 alpha, const DistMultiVec<Ring1>& X, DistMultiVec<Ring1>& Y );
@@ -119,6 +126,8 @@ void UpdateWithLocalData
 } // namespace util
 } // namespace axpy
 
+#endif /* TOM_SAYS_STAY */
+
 // AxpyContract
 // ============
 
@@ -143,6 +152,15 @@ template<typename Ring1,typename Ring2>
 void AxpyTrapezoid
 ( UpperOrLower uplo, Ring2 alpha,
   const BlockMatrix<Ring1>& X, BlockMatrix<Ring1>& Y, Int offset=0 );
+
+template<typename Ring>
+void LocalAxpyTrapezoid
+( UpperOrLower uplo, Ring alpha,
+  const AbstractDistMatrix<Ring>& X,
+        AbstractDistMatrix<Ring>& Y, Int offset=0 );
+
+#ifdef TOM_SAYS_STAY
+
 template<typename Ring1,typename Ring2>
 void AxpyTrapezoid
 ( UpperOrLower uplo, Ring2 alpha,
@@ -152,11 +170,7 @@ void AxpyTrapezoid
 ( UpperOrLower uplo, Ring2 alpha,
   const DistSparseMatrix<Ring1>& X, DistSparseMatrix<Ring1>& Y, Int offset=0 );
 
-template<typename Ring>
-void LocalAxpyTrapezoid
-( UpperOrLower uplo, Ring alpha,
-  const AbstractDistMatrix<Ring>& X,
-        AbstractDistMatrix<Ring>& Y, Int offset=0 );
+#endif /* TOM_SAYS_STAY */
 
 // Broadcast
 // =========
@@ -165,17 +179,12 @@ void Broadcast( Matrix<T>& A, mpi::Comm comm, int rank=0 );
 template<typename T>
 void Broadcast( AbstractDistMatrix<T>& A, mpi::Comm comm, int rank=0 );
 
+#ifdef TOM_SAYS_STAY
+
 // Send
 // ====
 template<typename T>
 void Send( const Matrix<T>& A, mpi::Comm comm, int destination );
-
-// SendRecv
-// ========
-template<typename T>
-void SendRecv
-( const Matrix<T>& A, Matrix<T>& B, mpi::Comm comm,
-  int sendRank, int recvRank );
 
 // Recv
 // ====
@@ -183,6 +192,15 @@ void SendRecv
 // on exit (without changing the leading dimension).
 template<typename T>
 void Recv( Matrix<T>& A, mpi::Comm comm, int source );
+
+#endif /* TOM_SAYS_STAY */
+
+// SendRecv
+// ========
+template<typename T>
+void SendRecv
+( const Matrix<T>& A, Matrix<T>& B, mpi::Comm comm,
+  int sendRank, int recvRank );
 
 // Column norms
 // ============
@@ -199,6 +217,9 @@ void ColumnTwoNorms
 template<typename Field,Dist U,Dist V,DistWrap W>
 void ColumnTwoNorms
 ( const DistMatrix<Field,U,V,W>& X, DistMatrix<Base<Field>,V,STAR,W>& norms );
+
+#ifdef TOM_SAYS_STAY
+
 template<typename Field>
 void ColumnTwoNorms
 ( const DistMultiVec<Field>& X, Matrix<Base<Field>>& norms );
@@ -208,6 +229,8 @@ void ColumnTwoNorms
 template<typename Field>
 void ColumnTwoNorms
 ( const DistSparseMatrix<Field>& X, DistMultiVec<Base<Field>>& norms );
+
+#endif /* TOM_SAYS_STAY */
 
 // Separated complex data
 // ^^^^^^^^^^^^^^^^^^^^^^
@@ -223,12 +246,17 @@ void ColumnTwoNorms
 ( const DistMatrix<Real,U,V>& XReal,
   const DistMatrix<Real,U,V>& XImag,
         DistMatrix<Real,V,STAR>& norms );
+
+#ifdef TOM_SAYS_STAY
+
 template<typename Real,
          typename=EnableIf<IsReal<Real>>>
 void ColumnTwoNorms
 ( const DistMultiVec<Real>& XReal,
   const DistMultiVec<Real>& XImag,
         Matrix<Real>& norms );
+
+#endif /* TOM_SAYS_STAY */
 
 // Max norms
 // ---------
@@ -238,6 +266,9 @@ void ColumnMaxNorms
 template<typename Ring,Dist U,Dist V,DistWrap W>
 void ColumnMaxNorms
 ( const DistMatrix<Ring,U,V,W>& X, DistMatrix<Base<Ring>,V,STAR,W>& norms );
+
+#ifdef TOM_SAYS_STAY
+
 template<typename Ring>
 void ColumnMaxNorms
 ( const DistMultiVec<Ring>& X, Matrix<Base<Ring>>& norms );
@@ -474,6 +505,8 @@ void ConjugateSubmatrix
 ( AbstractDistMatrix<T>& A,
   const vector<Int>& I, const vector<Int>& J );
 
+#endif /* TOM_SAYS_STAY */
+
 // Contract
 // ========
 template<typename T>
@@ -519,6 +552,8 @@ void CopyFromRoot
 template<typename T>
 void CopyFromNonRoot( DistMatrix<T,CIRC,CIRC,BLOCK>& B,
   bool includingViewers=false );
+
+#ifdef TOM_SAYS_STAY
 
 void Copy( const Graph& A, Graph& B );
 void Copy( const Graph& A, DistGraph& B );
@@ -797,12 +832,17 @@ void DiagonalSolve
   const DistMultiVec<FieldDiag>& d, DistMultiVec<Field>& X,
   bool checkIfSingular=true );
 
+#endif /* TOM_SAYS_STAY */
+
 // Dot
 // ===
 template<typename T>
 T Dot( const Matrix<T>& A, const Matrix<T>& B );
 template<typename T>
 T Dot( const AbstractDistMatrix<T>& A, const AbstractDistMatrix<T>& B );
+
+#ifdef TOM_SAYS_STAY
+
 template<typename T>
 T Dot( const DistMultiVec<T>& A, const DistMultiVec<T>& B );
 
@@ -815,38 +855,48 @@ T Dotu( const ElementalMatrix<T>& A, const ElementalMatrix<T>& B );
 template<typename T>
 T Dotu( const DistMultiVec<T>& A, const DistMultiVec<T>& B );
 
+#endif /* TOM_SAYS_STAY */
+
 // EntrywiseFill
 // =============
 template<typename T>
 void EntrywiseFill( Matrix<T>& A, function<T(void)> func );
 template<typename T>
 void EntrywiseFill( AbstractDistMatrix<T>& A, function<T(void)> func );
+
+#ifdef TOM_SAYS_STAY
 template<typename T>
 void EntrywiseFill( DistMultiVec<T>& A, function<T(void)> func );
+#endif /* TOM_SAYS_STAY */
 
 // EntrywiseMap
 // ============
 template<typename T>
 void EntrywiseMap( Matrix<T>& A, function<T(const T&)> func );
 template<typename T>
-void EntrywiseMap( SparseMatrix<T>& A, function<T(const T&)> func );
-template<typename T>
 void EntrywiseMap( AbstractDistMatrix<T>& A, function<T(const T&)> func );
+
+#ifdef TOM_SAYS_STAY
+template<typename T>
+void EntrywiseMap( SparseMatrix<T>& A, function<T(const T&)> func );
 template<typename T>
 void EntrywiseMap( DistSparseMatrix<T>& A, function<T(const T&)> func );
 template<typename T>
 void EntrywiseMap( DistMultiVec<T>& A, function<T(const T&)> func );
+#endif /* TOM_SAYS_STAY */
 
 template<typename S,typename T>
 void EntrywiseMap
 ( const Matrix<S>& A, Matrix<T>& B, function<T(const S&)> func );
 template<typename S,typename T>
 void EntrywiseMap
-( const SparseMatrix<S>& A, SparseMatrix<T>& B, function<T(const S&)> func );
-template<typename S,typename T>
-void EntrywiseMap
 ( const AbstractDistMatrix<S>& A, AbstractDistMatrix<T>& B,
   function<T(const S&)> func );
+
+#ifdef TOM_SAYS_STAY
+template<typename S,typename T>
+void EntrywiseMap
+( const SparseMatrix<S>& A, SparseMatrix<T>& B, function<T(const S&)> func );
 template<typename S,typename T>
 void EntrywiseMap
 ( const DistSparseMatrix<S>& A, DistSparseMatrix<T>& B,
@@ -856,12 +906,17 @@ void EntrywiseMap
 ( const DistMultiVec<S>& A, DistMultiVec<T>& B,
   function<T(const S&)> func );
 
+#endif /* TOM_SAYS_STAY */
+
 // Fill
 // ====
 template<typename T>
 void Fill( Matrix<T>& A, T alpha );
 template<typename T>
 void Fill( AbstractDistMatrix<T>& A, T alpha );
+
+#ifdef TOM_SAYS_STAY
+
 template<typename T>
 void Fill( DistMultiVec<T>& A, T alpha );
 template<typename T>
@@ -1016,6 +1071,8 @@ void GetSubgraph
   const vector<Int>& J,
         DistGraph& subgraph );
 
+#endif /* TOM_SAYS_STAY */
+
 // GetSubmatrix
 // ============
 
@@ -1074,6 +1131,8 @@ void GetSubmatrix
   const vector<Int>& J,
         AbstractDistMatrix<T>& ASub );
 
+#ifdef TOM_SAYS_STAY
+
 template<typename T>
 void GetSubmatrix
 ( const SparseMatrix<T>& A,
@@ -1148,6 +1207,8 @@ void GetSubmatrix
   const vector<Int>& I,
   const vector<Int>& J,
         DistMultiVec<T>& ASub );
+
+#endif /* TOM_SAYS_STAY */
 
 // Hadamard
 // ========
@@ -1158,11 +1219,6 @@ void Hadamard
 ( const AbstractDistMatrix<T>& A,
   const AbstractDistMatrix<T>& B,
         AbstractDistMatrix<T>& C );
-template<typename T>
-void Hadamard
-( const DistMultiVec<T>& A,
-  const DistMultiVec<T>& B,
-        DistMultiVec<T>& C );
 
 // HilbertSchmidt
 // ==============
@@ -1171,6 +1227,15 @@ T HilbertSchmidt( const Matrix<T>& A, const Matrix<T>& B );
 template<typename T>
 T HilbertSchmidt
 ( const AbstractDistMatrix<T>& A, const AbstractDistMatrix<T>& C );
+
+#ifdef TOM_SAYS_STAY
+
+template<typename T>
+void Hadamard
+( const DistMultiVec<T>& A,
+  const DistMultiVec<T>& B,
+        DistMultiVec<T>& C );
+
 template<typename T>
 T HilbertSchmidt( const DistMultiVec<T>& A, const DistMultiVec<T>& B );
 
@@ -1183,6 +1248,8 @@ template<typename T>
 void ImagPart
 ( const AbstractDistMatrix<T>& A, AbstractDistMatrix<Base<T>>& AImag );
 /* TODO(poulson): Sparse versions */
+
+#endif /* TOM_SAYS_STAY */
 
 // IndexDependentFill
 // ==================
@@ -1221,6 +1288,8 @@ void IndexDependentMap
         DistMatrix<T,U,V,BLOCK>& B,
         function<T(Int,Int,const S&)> func );
 
+#ifdef TOM_SAYS_STAY
+
 // Kronecker product
 // =================
 template<typename T>
@@ -1247,6 +1316,8 @@ template<typename T>
 void Kronecker
 ( const Matrix<T>& A, const SparseMatrix<T>& B, DistSparseMatrix<T>& C );
 
+#endif /* TOM_SAYS_STAY */
+
 // MakeHermitian
 // =============
 template<typename T>
@@ -1254,17 +1325,19 @@ void MakeHermitian( UpperOrLower uplo, Matrix<T>& A );
 template<typename T>
 void MakeHermitian( UpperOrLower uplo, ElementalMatrix<T>& A );
 
-template<typename T>
-void MakeHermitian( UpperOrLower uplo, SparseMatrix<T>& A );
-template<typename T>
-void MakeHermitian( UpperOrLower uplo, DistSparseMatrix<T>& A );
-
 // MakeDiagonalReal
 // ================
 template<typename T>
 void MakeDiagonalReal( Matrix<T>& A, Int offset=0 );
 template<typename T>
 void MakeDiagonalReal( AbstractDistMatrix<T>& A, Int offset=0 );
+
+#ifdef TOM_SAYS_STAY
+
+template<typename T>
+void MakeHermitian( UpperOrLower uplo, SparseMatrix<T>& A );
+template<typename T>
+void MakeHermitian( UpperOrLower uplo, DistSparseMatrix<T>& A );
 
 // MakeReal
 // ========
@@ -1284,6 +1357,8 @@ template<typename T>
 void MakeSubmatrixReal
 ( AbstractDistMatrix<T>& A, const vector<Int>& I, const vector<Int>& J );
 
+#endif /* TOM_SAYS_STAY */
+
 // MakeSymmetric
 // =============
 template<typename T>
@@ -1291,13 +1366,6 @@ void MakeSymmetric( UpperOrLower uplo, Matrix<T>& A, bool conjugate=false );
 template<typename T>
 void MakeSymmetric
 ( UpperOrLower uplo, ElementalMatrix<T>& A, bool conjugate=false );
-
-template<typename T>
-void MakeSymmetric
-( UpperOrLower uplo, SparseMatrix<T>& A, bool conjugate=false );
-template<typename T>
-void MakeSymmetric
-( UpperOrLower uplo, DistSparseMatrix<T>& A, bool conjugate=false );
 
 // MakeTrapezoidal
 // ===============
@@ -1307,11 +1375,21 @@ template<typename T>
 void MakeTrapezoidal
 ( UpperOrLower uplo, AbstractDistMatrix<T>& A, Int offset=0 );
 
+#ifdef TOM_SAYS_STAY
+
+template<typename T>
+void MakeSymmetric
+( UpperOrLower uplo, SparseMatrix<T>& A, bool conjugate=false );
+template<typename T>
+void MakeSymmetric
+( UpperOrLower uplo, DistSparseMatrix<T>& A, bool conjugate=false );
+
 template<typename T>
 void MakeTrapezoidal( UpperOrLower uplo, SparseMatrix<T>& A, Int offset=0 );
 template<typename T>
 void MakeTrapezoidal( UpperOrLower uplo, DistSparseMatrix<T>& A, Int offset=0 );
 
+#endif /* TOM_SAYS_STAY */
 // Max
 // ===
 template<typename Real,
@@ -1320,6 +1398,8 @@ Real Max( const Matrix<Real>& A );
 template<typename Real,
          typename=EnableIf<IsReal<Real>>>
 Real Max( const AbstractDistMatrix<Real>& A );
+
+#ifdef TOM_SAYS_STAY
 
 template<typename Real,
          typename=EnableIf<IsReal<Real>>>
@@ -1404,6 +1484,8 @@ template<typename T>
 Entry<Base<T>>
 SymmetricMaxAbsLoc( UpperOrLower uplo, const DistSparseMatrix<T>& A );
 
+#endif /* TOM_SAYS_STAY */
+
 // Min
 // ===
 template<typename Real,
@@ -1412,6 +1494,8 @@ Real Min( const Matrix<Real>& A );
 template<typename Real,
          typename=EnableIf<IsReal<Real>>>
 Real Min( const AbstractDistMatrix<Real>& A );
+
+#ifdef TOM_SAYS_STAY
 
 template<typename Real,
          typename=EnableIf<IsReal<Real>>>
@@ -1751,6 +1835,7 @@ template<typename T>
 void Round( DistMultiVec<T>& A );
 // TODO(poulson): Sparse matrix versions
 
+#endif /* TOM_SAYS_STAY */
 // Scale
 // =====
 // TODO(poulson): Force S=T?
@@ -1758,12 +1843,17 @@ template<typename T,typename S>
 void Scale( S alpha, Matrix<T>& A );
 template<typename T,typename S>
 void Scale( S alpha, AbstractDistMatrix<T>& A );
+
+#ifdef TOM_SAYS_STAY
+
 template<typename T,typename S>
 void Scale( S alpha, SparseMatrix<T>& A );
 template<typename T,typename S>
 void Scale( S alpha, DistSparseMatrix<T>& A );
 template<typename T,typename S>
 void Scale( S alpha, DistMultiVec<T>& A );
+
+#endif /* TOM_SAYS_STAY */
 
 template<typename Real,typename S,
          typename=EnableIf<IsReal<Real>>>
@@ -1772,6 +1862,8 @@ template<typename Real,typename S,
          typename=EnableIf<IsReal<Real>>>
 void Scale
 ( S alpha, AbstractDistMatrix<Real>& AReal, AbstractDistMatrix<Real>& AImag );
+
+#ifdef TOM_SAYS_STAY
 
 template<typename Field>
 void SafeScale
@@ -1820,6 +1912,8 @@ void SafeScaleHermitianTridiag
 ( Base<Field> numerator, Base<Field> denominator,
   Matrix<Base<Field>>& d, Matrix<Field>& e );
 
+#endif /* TOM_SAYS_STAY */
+
 // ScaleTrapezoid
 // ==============
 template<typename T,typename S>
@@ -1827,6 +1921,9 @@ void ScaleTrapezoid( S alpha, UpperOrLower uplo, Matrix<T>& A, Int offset=0 );
 template<typename T,typename S>
 void ScaleTrapezoid
 ( S alpha, UpperOrLower uplo, AbstractDistMatrix<T>& A, Int offset=0 );
+
+#ifdef TOM_SAYS_STAY
+
 template<typename T,typename S>
 void ScaleTrapezoid
 ( S alpha, UpperOrLower uplo, SparseMatrix<T>& A, Int offset=0 );
@@ -1948,6 +2045,8 @@ template<typename T,typename S>
 void ShiftDiagonal
 ( DistSparseMatrix<T>& A, S alpha, Int offset=0, bool existingDiag=false );
 
+#endif /* TOM_SAYS_STAY */
+
 // Transpose
 // =========
 template<typename T>
@@ -1970,6 +2069,9 @@ void Transpose
 ( const AbstractDistMatrix<T>& A,
         AbstractDistMatrix<T>& B,
   bool conjugate=false );
+
+#ifdef TOM_SAYS_STAY
+
 template<typename T>
 void Transpose
 ( const SparseMatrix<T>& A,
@@ -2009,6 +2111,8 @@ void TransposeAxpy
 ( S alpha, const DistSparseMatrix<T>& X, DistSparseMatrix<T>& Y,
   bool conjugate=false );
 
+#endif /* TOM_SAYS_STAY */
+
 // TransposeAxpyContract
 // =====================
 template<typename T>
@@ -2019,6 +2123,8 @@ template<typename T>
 void TransposeAxpyContract
 ( T alpha, const BlockMatrix<T>& A,
                  BlockMatrix<T>& B, bool conjugate=false );
+
+#ifdef TOM_SAYS_STAY
 
 // UpdateDiagonal
 // ==============
@@ -2108,12 +2214,18 @@ void UpdateSubmatrix
   const vector<Int>& I, const vector<Int>& J,
   T alpha, const AbstractDistMatrix<T>& ASub );
 
+#endif /* TOM_SAYS_STAY */
+
 // Zero
 // ====
 template<typename T>
 void Zero( Matrix<T>& A );
 template<typename T>
 void Zero( AbstractDistMatrix<T>& A );
+
+
+#ifdef TOM_SAYS_STAY
+
 template<typename T>
 void Zero( SparseMatrix<T>& A, bool clearMemory=true );
 template<typename T>
@@ -2145,6 +2257,8 @@ Complex<Real> Givens
   const Complex<Real>& gamma,
   Real& c,
   Complex<Real>& s );
+
+#endif /* TOM_SAYS_STAY */
 
 } // namespace El
 

@@ -68,6 +68,8 @@ void Axpy( S alphaS, const Matrix<T>& X, Matrix<T>& Y )
     }
 }
 
+#ifdef TOM_SAYS_STAY
+
 template<typename T,typename S>
 void Axpy( S alphaS, const SparseMatrix<T>& X, SparseMatrix<T>& Y )
 {
@@ -85,6 +87,8 @@ void Axpy( S alphaS, const SparseMatrix<T>& X, SparseMatrix<T>& Y )
         Y.QueueUpdate( XRowBuf[k], XColBuf[k], alpha*XValBuf[k] );
     Y.ProcessQueues();
 }
+
+#endif /* TOM_SAYS_STAY */
 
 template<typename T,typename S>
 void Axpy( S alphaS, const ElementalMatrix<T>& X, ElementalMatrix<T>& Y )
@@ -177,6 +181,8 @@ void Axpy( S alphaS, const AbstractDistMatrix<T>& X, AbstractDistMatrix<T>& Y )
     }
 }
 
+#ifdef TOM_SAYS_STAY
+
 template<typename T,typename S>
 void Axpy( S alphaS, const DistSparseMatrix<T>& X, DistSparseMatrix<T>& Y )
 {
@@ -214,6 +220,8 @@ void Axpy( S alpha, const DistMultiVec<T>& X, DistMultiVec<T>& Y )
     Axpy( alpha, X.LockedMatrix(), Y.Matrix() );
 }
 
+#endif /* TOM_SAYS_STAY */
+
 #ifdef EL_INSTANTIATE_BLAS_LEVEL1
 # define EL_EXTERN
 #else
@@ -224,17 +232,21 @@ void Axpy( S alpha, const DistMultiVec<T>& X, DistMultiVec<T>& Y )
   EL_EXTERN template void Axpy \
   ( T alpha, const Matrix<T>& X, Matrix<T>& Y ); \
   EL_EXTERN template void Axpy \
-  ( T alpha, const SparseMatrix<T>& X, SparseMatrix<T>& Y ); \
-  EL_EXTERN template void Axpy \
   ( T alpha, const ElementalMatrix<T>& X, ElementalMatrix<T>& Y ); \
   EL_EXTERN template void Axpy \
   ( T alpha, const BlockMatrix<T>& X, BlockMatrix<T>& Y ); \
   EL_EXTERN template void Axpy \
-  ( T alpha, const AbstractDistMatrix<T>& X, AbstractDistMatrix<T>& Y ); \
+  ( T alpha, const AbstractDistMatrix<T>& X, AbstractDistMatrix<T>& Y );
+
+#ifdef TOM_SAYS_STAY
+                                                \
+EL_EXTERN template void Axpy                                 \
+  ( T alpha, const SparseMatrix<T>& X, SparseMatrix<T>& Y ); \
   EL_EXTERN template void Axpy \
   ( T alpha, const DistSparseMatrix<T>& X, DistSparseMatrix<T>& Y ); \
   EL_EXTERN template void Axpy \
   ( T alpha, const DistMultiVec<T>& X, DistMultiVec<T>& Y );
+#endif /* TOM_SAYS_STAY */
 
 #define EL_ENABLE_DOUBLEDOUBLE
 #define EL_ENABLE_QUADDOUBLE

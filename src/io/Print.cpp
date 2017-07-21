@@ -60,6 +60,8 @@ void Print
     }
 }
 
+#ifdef TOM_SAYS_STAY
+
 template<typename T>
 void Print( const DistMultiVec<T>& X, string title, ostream& os )
 {
@@ -153,6 +155,8 @@ void PrintLocal
     LogicError("This routine needs to be rewritten");
 }
 
+#endif /* TOM_SAYS_STAY */
+
 // Utilities
 // =========
 
@@ -177,13 +181,17 @@ void Print( const vector<T>& x, string title, ostream& os )
   template void Print \
   ( const Matrix<T>& A, string title, ostream& os ); \
   template void Print \
-  ( const AbstractDistMatrix<T>& A, string title, ostream& os ); \
+  ( const AbstractDistMatrix<T>& A, string title, ostream& os );
+
+#ifdef TOM_SAYS_STAY
+                                                \
   template void Print \
   ( const DistMultiVec<T>& X, string title, ostream& os ); \
   template void Print \
   ( const SparseMatrix<T>& A, string title, ostream& os ); \
   template void Print \
   ( const DistSparseMatrix<T>& A, string title, ostream& os );
+#endif /* TOM_SAYS_STAY */
 
 #define EL_ENABLE_DOUBLEDOUBLE
 #define EL_ENABLE_QUADDOUBLE

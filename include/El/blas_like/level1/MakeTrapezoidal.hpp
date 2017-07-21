@@ -86,6 +86,8 @@ MakeTrapezoidal( UpperOrLower uplo, AbstractDistMatrix<T>& A, Int offset )
     }
 }
 
+#ifdef TOM_SAYS_STAY
+
 template<typename T>
 void MakeTrapezoidal( UpperOrLower uplo, SparseMatrix<T>& A, Int offset )
 {
@@ -119,6 +121,8 @@ void MakeTrapezoidal( UpperOrLower uplo, DistSparseMatrix<T>& A, Int offset )
     A.ProcessLocalQueues();
 }
 
+#endif /* TOM_SAYS_STAY */
+
 #ifdef EL_INSTANTIATE_BLAS_LEVEL1
 # define EL_EXTERN
 #else
@@ -129,11 +133,15 @@ void MakeTrapezoidal( UpperOrLower uplo, DistSparseMatrix<T>& A, Int offset )
   EL_EXTERN template void MakeTrapezoidal \
   ( UpperOrLower uplo, Matrix<T>& A, Int offset ); \
   EL_EXTERN template void MakeTrapezoidal \
-  ( UpperOrLower uplo, AbstractDistMatrix<T>& A, Int offset ); \
+  ( UpperOrLower uplo, AbstractDistMatrix<T>& A, Int offset );
+
+#ifdef TOM_SAYS_STAY
+                                                \
   EL_EXTERN template void MakeTrapezoidal \
   ( UpperOrLower uplo, SparseMatrix<T>& A, Int offset ); \
   EL_EXTERN template void MakeTrapezoidal \
   ( UpperOrLower uplo, DistSparseMatrix<T>& A, Int offset );
+#endif /* TOM_SAYS_STAY */
 
 #define EL_ENABLE_DOUBLEDOUBLE
 #define EL_ENABLE_QUADDOUBLE

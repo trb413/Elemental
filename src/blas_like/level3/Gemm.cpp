@@ -2,8 +2,8 @@
    Copyright (c) 2009-2016, Jack Poulson
    All rights reserved.
 
-   This file is part of Elemental and is under the BSD 2-Clause License, 
-   which can be found in the LICENSE file in the root directory, or at 
+   This file is part of Elemental and is under the BSD 2-Clause License,
+   which can be found in the LICENSE file in the root directory, or at
    http://opensource.org/licenses/BSD-2-Clause
 */
 #include <El-lite.hpp>
@@ -34,7 +34,7 @@ template<typename T>
 void Gemm
 ( Orientation orientA, Orientation orientB,
   T alpha, const Matrix<T>& A,
-           const Matrix<T>& B, 
+           const Matrix<T>& B,
   T beta,        Matrix<T>& C )
 {
     EL_DEBUG_CSE
@@ -74,7 +74,7 @@ void Gemm
     if( k != 0 )
     {
 #if defined(EL_USE_CUBLAS)
-        if (gemm_cpu_gpu_switch == 'g' && 
+        if (gemm_cpu_gpu_switch == 'g' &&
             m >= min_M &&
             n >= min_N &&
             k >= min_K) {
@@ -108,7 +108,7 @@ template<typename T>
 void Gemm
 ( Orientation orientA, Orientation orientB,
   T alpha, const Matrix<T>& A,
-           const Matrix<T>& B, 
+           const Matrix<T>& B,
                  Matrix<T>& C )
 {
     EL_DEBUG_CSE
@@ -124,7 +124,7 @@ void Gemm
 ( Orientation orientA, Orientation orientB,
   T alpha, const AbstractDistMatrix<T>& A,
            const AbstractDistMatrix<T>& B,
-  T beta,        AbstractDistMatrix<T>& C, 
+  T beta,        AbstractDistMatrix<T>& C,
   GemmAlgorithm alg )
 {
     EL_DEBUG_CSE
@@ -133,7 +133,7 @@ void Gemm
     {
         if( alg == GEMM_CANNON )
             gemm::Cannon_NN( alpha, A, B, C );
-        else 
+        else
             gemm::SUMMA_NN( alpha, A, B, C, alg );
     }
     else if( orientA == NORMAL )

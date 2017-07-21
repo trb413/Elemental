@@ -48,6 +48,8 @@ void Fill( AbstractDistMatrix<T>& A, T alpha )
     Fill( A.Matrix(), alpha );
 }
 
+#ifdef TOM_SAYS_STAY
+
 template<typename T>
 void Fill( DistMultiVec<T>& A, T alpha )
 {
@@ -90,6 +92,8 @@ void Fill( DistSparseMatrix<T>& A, T alpha )
     }
 }
 
+#endif /* TOM_SAYS_STAY */
+
 #ifdef EL_INSTANTIATE_BLAS_LEVEL1
 # define EL_EXTERN
 #else
@@ -98,10 +102,14 @@ void Fill( DistSparseMatrix<T>& A, T alpha )
 
 #define PROTO(T) \
   EL_EXTERN template void Fill( Matrix<T>& A, T alpha ); \
-  EL_EXTERN template void Fill( AbstractDistMatrix<T>& A, T alpha ); \
+  EL_EXTERN template void Fill( AbstractDistMatrix<T>& A, T alpha );
+
+#ifdef TOM_SAYS_STAY
+                                                                \
   EL_EXTERN template void Fill( DistMultiVec<T>& A, T alpha ); \
   EL_EXTERN template void Fill( SparseMatrix<T>& A, T alpha ); \
   EL_EXTERN template void Fill( DistSparseMatrix<T>& A, T alpha );
+#endif /* TOM_SAYS_STAY */
 
 #define EL_ENABLE_DOUBLEDOUBLE
 #define EL_ENABLE_QUADDOUBLE

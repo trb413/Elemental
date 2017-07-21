@@ -25,6 +25,54 @@ Base<Field> FrobeniusNorm( const Matrix<Field>& A )
     return scale*Sqrt(scaledSquare);
 }
 
+template<typename Real>
+Real NormFromScaledSquare
+( Real localScale, Real localScaledSquare, mpi::Comm comm )
+{
+    // Find the maximum relative scale
+    const Real scale = mpi::AllReduce( localScale, mpi::MAX, comm );
+
+    if( scale != Real(0) )
+    {
+        // Equilibrate our local scaled sum to the maximum scale
+        Real relScale = localScale/scale;
+        localScaledSquare *= relScale*relScale;
+
+        // The scaled square is now the sum of the local contributions
+        const Real scaledSquare = mpi::AllReduce( localScaledSquare, comm );
+        return scale*Sqrt(scaledSquare);
+    }
+    else
+      return 0;
+}
+
+template<typename Field>
+Base<Field> FrobeniusNorm( const AbstractDistMatrix<Field>& A )
+{
+    EL_DEBUG_CSE
+    typedef Base<Field> Real;
+    Real norm;
+    if( A.Participating() )
+    {
+        Real localScale=0, localScaledSquare=1;
+        const Int localHeight = A.LocalHeight();
+        const Int localWidth = A.LocalWidth();
+        const Matrix<Field>& ALoc = A.LockedMatrix();
+        for( Int jLoc=0; jLoc<localWidth; ++jLoc )
+            for( Int iLoc=0; iLoc<localHeight; ++iLoc )
+                UpdateScaledSquare
+                ( ALoc(iLoc,jLoc), localScale, localScaledSquare );
+
+        norm = NormFromScaledSquare
+          ( localScale, localScaledSquare, A.DistComm() );
+    }
+    mpi::Broadcast( norm, A.Root(), A.CrossComm() );
+    return norm;
+}
+
+
+#ifdef TOM_SAYS_STAY
+
 template<typename Field>
 Base<Field> FrobeniusNorm( const SparseMatrix<Field>& A )
 {
@@ -118,51 +166,6 @@ SymmetricFrobeniusNorm( UpperOrLower uplo, const SparseMatrix<Field>& A )
 {
     EL_DEBUG_CSE
     return HermitianFrobeniusNorm( uplo, A );
-}
-
-template<typename Real>
-Real NormFromScaledSquare
-( Real localScale, Real localScaledSquare, mpi::Comm comm )
-{
-    // Find the maximum relative scale
-    const Real scale = mpi::AllReduce( localScale, mpi::MAX, comm );
-
-    if( scale != Real(0) )
-    {
-        // Equilibrate our local scaled sum to the maximum scale
-        Real relScale = localScale/scale;
-        localScaledSquare *= relScale*relScale;
-
-        // The scaled square is now the sum of the local contributions
-        const Real scaledSquare = mpi::AllReduce( localScaledSquare, comm );
-        return scale*Sqrt(scaledSquare);
-    }
-    else
-      return 0;
-}
-
-template<typename Field>
-Base<Field> FrobeniusNorm( const AbstractDistMatrix<Field>& A )
-{
-    EL_DEBUG_CSE
-    typedef Base<Field> Real;
-    Real norm;
-    if( A.Participating() )
-    {
-        Real localScale=0, localScaledSquare=1;
-        const Int localHeight = A.LocalHeight();
-        const Int localWidth = A.LocalWidth();
-        const Matrix<Field>& ALoc = A.LockedMatrix();
-        for( Int jLoc=0; jLoc<localWidth; ++jLoc )
-            for( Int iLoc=0; iLoc<localHeight; ++iLoc )
-                UpdateScaledSquare
-                ( ALoc(iLoc,jLoc), localScale, localScaledSquare );
-
-        norm = NormFromScaledSquare
-          ( localScale, localScaledSquare, A.DistComm() );
-    }
-    mpi::Broadcast( norm, A.Root(), A.CrossComm() );
-    return norm;
 }
 
 template<typename Field>
@@ -302,9 +305,14 @@ Base<Field> FrobeniusNorm( const DistMultiVec<Field>& A )
       ( localScale, localScaledSquare, A.Grid().Comm() );
 }
 
+#endif /* TOM_SAYS_STAY */
+
 #define PROTO(Field) \
   template Base<Field> FrobeniusNorm( const Matrix<Field>& A ); \
-  template Base<Field> FrobeniusNorm ( const AbstractDistMatrix<Field>& A ); \
+  template Base<Field> FrobeniusNorm ( const AbstractDistMatrix<Field>& A );
+
+#ifdef TOM_SAYS_STAY
+                                                                        \
   template Base<Field> FrobeniusNorm( const SparseMatrix<Field>& A ); \
   template Base<Field> FrobeniusNorm( const DistSparseMatrix<Field>& A ); \
   template Base<Field> FrobeniusNorm ( const DistMultiVec<Field>& A ); \
@@ -324,6 +332,8 @@ Base<Field> FrobeniusNorm( const DistMultiVec<Field>& A )
   ( UpperOrLower uplo, const SparseMatrix<Field>& A ); \
   template Base<Field> SymmetricFrobeniusNorm \
   ( UpperOrLower uplo, const DistSparseMatrix<Field>& A );
+
+#endif /* TOM_SAYS_STAY */
 
 #define EL_NO_INT_PROTO
 #define EL_ENABLE_DOUBLEDOUBLE

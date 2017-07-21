@@ -102,6 +102,8 @@ void Read
     }
 }
 
+#ifdef TOM_SAYS_STAY
+
 template<typename T>
 void Read( SparseMatrix<T>& A, const string filename, FileFormat format )
 {
@@ -136,16 +138,23 @@ void Read( DistSparseMatrix<T>& A, const string filename, FileFormat format )
     }
 }
 
+#endif /* TOM_SAYS_STAY */
+
 #define PROTO(T) \
   template void Read \
   ( Matrix<T>& A, const string filename, FileFormat format ); \
   template void Read \
   ( AbstractDistMatrix<T>& A, const string filename, \
-    FileFormat format, bool sequential ); \
+    FileFormat format, bool sequential );
+
+#ifdef TOM_SAYS_STAY
+                                                \
   template void Read \
   ( SparseMatrix<T>& A, const string filename, FileFormat format ); \
   template void Read \
   ( DistSparseMatrix<T>& A, const string filename, FileFormat format );
+
+#endif /* TOM_SAYS_STAY */
 
 #define EL_ENABLE_DOUBLEDOUBLE
 #define EL_ENABLE_QUADDOUBLE

@@ -87,6 +87,8 @@ ScaleTrapezoid
     }
 }
 
+#ifdef TOM_SAYS_STAY
+
 template<typename T,typename S>
 void
 ScaleTrapezoid( S alpha, UpperOrLower uplo, SparseMatrix<T>& A, Int offset )
@@ -126,6 +128,8 @@ ScaleTrapezoid( S alpha, UpperOrLower uplo, DistSparseMatrix<T>& A, Int offset )
             vBuf[k] *= alpha;
     }
 }
+
+#endif /* TOM_SAYS_STAY */
 
 } // namespace El
 

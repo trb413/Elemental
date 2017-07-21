@@ -11,6 +11,8 @@
 
 namespace El {
 
+#ifdef TOM_SAYS_STAY
+
 // Condition number
 // ================
 template<typename F>
@@ -145,12 +147,17 @@ Base<F> HermitianNorm
 ( UpperOrLower uplo, const AbstractDistMatrix<F>& A,
   NormType type=FROBENIUS_NORM );
 
+#endif /* TOM_SAYS_STAY */
+
 // Entrywise norm
 // --------------
 template<typename F>
 Base<F> EntrywiseNorm( const Matrix<F>& A, Base<F> p=1 );
 template<typename F>
 Base<F> EntrywiseNorm( const AbstractDistMatrix<F>& A, Base<F> p=1 );
+
+#ifdef TOM_SAYS_STAY
+
 template<typename F>
 Base<F> EntrywiseNorm( const SparseMatrix<F>& A, Base<F> p=1 );
 template<typename F>
@@ -184,12 +191,17 @@ template<typename F>
 Base<F> SymmetricEntrywiseNorm
 ( UpperOrLower uplo, const DistSparseMatrix<F>& A, Base<F> p=1 );
 
+#endif /* TOM_SAYS_STAY */
+
 // Frobenius norm
 // --------------
 template<typename F>
 Base<F> FrobeniusNorm( const Matrix<F>& A );
 template<typename F>
 Base<F> FrobeniusNorm( const AbstractDistMatrix<F>& A );
+
+#ifdef TOM_SAYS_STAY
+
 template<typename F>
 Base<F> FrobeniusNorm( const SparseMatrix<F>& A );
 template<typename F>
@@ -461,6 +473,8 @@ template<typename T>
 T Trace( const Matrix<T>& A );
 template<typename T>
 T Trace( const AbstractDistMatrix<T>& A );
+
+#endif /* TOM_SAYS_STAY */
 
 } // namespace El
 

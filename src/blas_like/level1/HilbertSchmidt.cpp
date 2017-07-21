@@ -85,6 +85,7 @@ Ring HilbertSchmidt
     return innerProd;
 }
 
+#ifdef TOM_SAYS_STAY
 template<typename Ring>
 Ring HilbertSchmidt( const DistMultiVec<Ring>& A, const DistMultiVec<Ring>& B )
 {
@@ -110,14 +111,19 @@ Ring HilbertSchmidt( const DistMultiVec<Ring>& A, const DistMultiVec<Ring>& B )
             localInnerProd += Conj(ABuf[iLoc+j*ALDim])*BBuf[iLoc+j*BLDim];
     return mpi::AllReduce( localInnerProd, A.Grid().Comm() );
 }
+#endif /* TOM_SAYS_STAY */
 
 #define PROTO(Ring) \
   template Ring HilbertSchmidt \
   ( const Matrix<Ring>& A, const Matrix<Ring>& B ); \
   template Ring HilbertSchmidt \
-  ( const AbstractDistMatrix<Ring>& A, const AbstractDistMatrix<Ring>& B ); \
+  ( const AbstractDistMatrix<Ring>& A, const AbstractDistMatrix<Ring>& B );
+
+#ifdef TOM_SAYS_STAY
+                                                \
   template Ring HilbertSchmidt \
   ( const DistMultiVec<Ring>& A, const DistMultiVec<Ring>& B );
+#endif /* TOM_SAYS_STAY */
 
 #define EL_ENABLE_DOUBLEDOUBLE
 #define EL_ENABLE_QUADDOUBLE

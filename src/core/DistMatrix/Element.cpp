@@ -446,6 +446,7 @@ ElementalMatrix<T>::operator=( const AbstractDistMatrix<T>& A )
     return *this;
 }
 
+#ifdef TOM_SAYS_STAY
 template<typename T>
 const ElementalMatrix<T>&
 ElementalMatrix<T>::operator=( const DistMultiVec<T>& A )
@@ -454,6 +455,7 @@ ElementalMatrix<T>::operator=( const DistMultiVec<T>& A )
     El::Copy( A, *this );
     return *this;
 }
+#endif /* TOM_SAYS_STAY */
 
 // Rescaling
 // ---------

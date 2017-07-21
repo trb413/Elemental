@@ -94,9 +94,10 @@ public:
     // ----
     const type& operator=( const type& A );
     const type& operator=( const absType& A );
+#ifdef TOM_SAYS_STAY
     // TODO(poulson): Eliminate this routine
     const type& operator=( const DistMultiVec<Ring>& A );
-
+#endif /* TOM_SAYS_STAY */
     // Rescaling
     // ---------
     const type& operator*=( Ring alpha );

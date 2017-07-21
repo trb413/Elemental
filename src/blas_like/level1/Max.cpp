@@ -55,6 +55,8 @@ Real Max( const AbstractDistMatrix<Real>& A )
     return value;
 }
 
+#ifdef TOM_SAYS_STAY
+
 template<typename Real,
          typename/*=EnableIf<IsReal<Real>>*/>
 Real SymmetricMax( UpperOrLower uplo, const Matrix<Real>& A )
@@ -129,12 +131,18 @@ Real SymmetricMax( UpperOrLower uplo, const AbstractDistMatrix<Real>& A )
     return value;
 }
 
+#endif /* TOM_SAYS_STAY */
+
 #define PROTO(Real) \
   template Real Max( const Matrix<Real>& x ); \
-  template Real Max( const AbstractDistMatrix<Real>& x ); \
+  template Real Max( const AbstractDistMatrix<Real>& x );
+
+#ifdef TOM_SAYS_STAY
+                                                                        \
   template Real SymmetricMax( UpperOrLower uplo, const Matrix<Real>& A ); \
   template Real SymmetricMax \
   ( UpperOrLower uplo, const AbstractDistMatrix<Real>& A );
+#endif /* TOM_SAYS_STAY */
 
 #define EL_NO_COMPLEX_PROTO
 #define EL_ENABLE_DOUBLEDOUBLE

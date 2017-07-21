@@ -25,6 +25,8 @@ T Dot( const AbstractDistMatrix<T>& A, const AbstractDistMatrix<T>& B )
     return HilbertSchmidt( A, B );
 }
 
+#ifdef TOM_SAYS_STAY
+
 template<typename T>
 T Dot( const DistMultiVec<T>& A, const DistMultiVec<T>& B )
 {
@@ -103,6 +105,7 @@ T Dotu( const DistMultiVec<T>& A, const DistMultiVec<T>& B )
             localInnerProd += ALoc(iLoc,j)*BLoc(iLoc,j);
     return mpi::AllReduce( localInnerProd, A.Grid().Comm() );
 }
+#endif /* TOM_SAYS_STAY */
 
 #ifdef EL_INSTANTIATE_BLAS_LEVEL1
 # define EL_EXTERN
@@ -114,7 +117,10 @@ T Dotu( const DistMultiVec<T>& A, const DistMultiVec<T>& B )
   EL_EXTERN template T Dot \
   ( const Matrix<T>& A, const Matrix<T>& B ); \
   EL_EXTERN template T Dot \
-  ( const AbstractDistMatrix<T>& A, const AbstractDistMatrix<T>& B ); \
+  ( const AbstractDistMatrix<T>& A, const AbstractDistMatrix<T>& B );
+
+#ifdef TOM_SAYS_STAY
+                                                \
   EL_EXTERN template T Dot \
   ( const DistMultiVec<T>& A, const DistMultiVec<T>& B ); \
   EL_EXTERN template T Dotu \
@@ -123,6 +129,7 @@ T Dotu( const DistMultiVec<T>& A, const DistMultiVec<T>& B )
   ( const ElementalMatrix<T>& A, const ElementalMatrix<T>& B ); \
   EL_EXTERN template T Dotu \
   ( const DistMultiVec<T>& A, const DistMultiVec<T>& B );
+#endif /* TOM_SAYS_STAY */
 
 #define EL_ENABLE_DOUBLEDOUBLE
 #define EL_ENABLE_QUADDOUBLE

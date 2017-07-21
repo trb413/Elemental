@@ -241,6 +241,7 @@ void CopyFromNonRoot
     B.MakeSizeConsistent( includingViewers );
 }
 
+#ifdef TOM_SAYS_STAY
 template<typename T>
 void Copy( const SparseMatrix<T>& A, SparseMatrix<T>& B )
 {
@@ -524,6 +525,7 @@ void CopyFromNonRoot( const DistMultiVec<T>& XDist, int root )
           (T*)0, entrySizes.data(), entryOffs.data(), root, grid.Comm() );
     }
 }
+#endif /* TOM_SAYS_STAY */
 
 #ifdef EL_INSTANTIATE_BLAS_LEVEL1
 # define EL_EXTERN
@@ -544,7 +546,10 @@ void CopyFromNonRoot( const DistMultiVec<T>& XDist, int root )
   ( const Matrix<T>& A, DistMatrix<T,CIRC,CIRC,BLOCK>& B, \
     bool includingViewers ); \
   EL_EXTERN template void CopyFromNonRoot \
-  ( DistMatrix<T,CIRC,CIRC,BLOCK>& B, bool includingViewers ); \
+  ( DistMatrix<T,CIRC,CIRC,BLOCK>& B, bool includingViewers );
+
+#ifdef TOM_SAYS_STAY
+                                                \
   EL_EXTERN template void Copy \
   ( const SparseMatrix<T>& A, SparseMatrix<T>& B ); \
   EL_EXTERN template void Copy \
@@ -563,6 +568,8 @@ void CopyFromNonRoot( const DistMultiVec<T>& XDist, int root )
   ( const DistMultiVec<T>& XDist, Matrix<T>& X ); \
   EL_EXTERN template void CopyFromNonRoot \
   ( const DistMultiVec<T>& XDist, int root );
+
+#endif /* TOM_SAYS_STAY */
 
 #define EL_ENABLE_DOUBLEDOUBLE
 #define EL_ENABLE_QUADDOUBLE

@@ -2,8 +2,8 @@
    Copyright (c) 2009-2016, Jack Poulson
    All rights reserved.
 
-   This file is part of Elemental and is under the BSD 2-Clause License, 
-   which can be found in the LICENSE file in the root directory, or at 
+   This file is part of Elemental and is under the BSD 2-Clause License,
+   which can be found in the LICENSE file in the root directory, or at
    http://opensource.org/licenses/BSD-2-Clause
 */
 #ifndef EL_MATRIX_IMPL_HPP
@@ -45,7 +45,7 @@ template<typename Ring>
 Matrix<Ring>::Matrix
 ( Int height, Int width, const Ring* buffer, Int leadingDimension )
 : viewType_(LOCKED_VIEW),
-  height_(height), width_(width), leadingDimension_(leadingDimension), 
+  height_(height), width_(width), leadingDimension_(leadingDimension),
   data_(const_cast<Ring*>(buffer))
 {
     EL_DEBUG_CSE
@@ -56,7 +56,7 @@ template<typename Ring>
 Matrix<Ring>::Matrix
 ( Int height, Int width, Ring* buffer, Int leadingDimension )
 : viewType_(VIEW),
-  height_(height), width_(width), leadingDimension_(leadingDimension), 
+  height_(height), width_(width), leadingDimension_(leadingDimension),
   data_(buffer)
 {
     EL_DEBUG_CSE
@@ -121,8 +121,8 @@ void Matrix<Ring>::Resize( Int height, Int width, Int leadingDimension )
     EL_DEBUG_CSE
     EL_DEBUG_ONLY(
       AssertValidDimensions( height, width, leadingDimension );
-      if( FixedSize() && 
-          ( height != height_ || width != width_ || 
+      if( FixedSize() &&
+          ( height != height_ || width != width_ ||
             leadingDimension != leadingDimension_ ) )
       {
           LogicError
@@ -130,7 +130,7 @@ void Matrix<Ring>::Resize( Int height, Int width, Int leadingDimension )
            height_," x ",width_," (",leadingDimension_,") to ",
            height," x ",width," (",leadingDimension,")");
       }
-      if( Viewing() && (height > height_ || width > width_ || 
+      if( Viewing() && (height > height_ || width > width_ ||
           leadingDimension != leadingDimension_) )
           LogicError("Cannot increase the size of this matrix");
     )
@@ -202,7 +202,7 @@ Matrix<Ring> Matrix<Ring>::operator()
 ( Range<Int> I, const vector<Int>& J ) const
 {
     EL_DEBUG_CSE
-    Matrix<Ring> ASub; 
+    Matrix<Ring> ASub;
     GetSubmatrix( *this, I, J, ASub );
     return ASub;
 }
@@ -411,7 +411,7 @@ EL_NO_RELEASE_EXCEPT
 }
 
 template<typename Ring>
-void Matrix<Ring>::Set( Int i, Int j, const Ring& alpha ) 
+void Matrix<Ring>::Set( Int i, Int j, const Ring& alpha )
 EL_NO_RELEASE_EXCEPT
 {
     EL_DEBUG_CSE
@@ -471,7 +471,7 @@ EL_NO_RELEASE_EXCEPT
 { SetImagPart( entry.i, entry.j, entry.value ); }
 
 template<typename Ring>
-void Matrix<Ring>::Update( Int i, Int j, const Ring& alpha ) 
+void Matrix<Ring>::Update( Int i, Int j, const Ring& alpha )
 EL_NO_RELEASE_EXCEPT
 {
     EL_DEBUG_CSE
@@ -623,10 +623,10 @@ void Matrix<Ring>::Control_
 // Return a reference to a single entry without error-checking
 // ===========================================================
 template<typename Ring>
-const Ring& Matrix<Ring>::CRef( Int i, Int j ) const 
+const Ring& Matrix<Ring>::CRef( Int i, Int j ) const
 EL_NO_RELEASE_EXCEPT
-{ 
-    return data_[i+j*leadingDimension_]; 
+{
+    return data_[i+j*leadingDimension_];
 }
 
 template<typename Ring>
@@ -639,14 +639,14 @@ EL_NO_RELEASE_EXCEPT
 }
 
 template<typename Ring>
-Ring& Matrix<Ring>::Ref( Int i, Int j ) 
+Ring& Matrix<Ring>::Ref( Int i, Int j )
 EL_NO_RELEASE_EXCEPT
 {
     return data_[i+j*leadingDimension_];
 }
 
 template<typename Ring>
-Ring& Matrix<Ring>::operator()( Int i, Int j ) 
+Ring& Matrix<Ring>::operator()( Int i, Int j )
 EL_NO_RELEASE_EXCEPT
 {
     EL_DEBUG_CSE

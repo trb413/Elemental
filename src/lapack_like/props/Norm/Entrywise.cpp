@@ -26,6 +26,30 @@ Base<Field> EntrywiseNorm( const Matrix<Field>& A, Base<Field> p )
 }
 
 template<typename Field>
+Base<Field> EntrywiseNorm( const AbstractDistMatrix<Field>& A, Base<Field> p )
+{
+    EL_DEBUG_CSE
+    typedef Base<Field> Real;
+    Real norm;
+    if( A.Participating() )
+    {
+        Real localSum = 0;
+        const Int localHeight = A.LocalHeight();
+        const Int localWidth = A.LocalWidth();
+        const Matrix<Field>& ALoc = A.LockedMatrix();
+        for( Int jLoc=0; jLoc<localWidth; ++jLoc )
+            for( Int iLoc=0; iLoc<localHeight; ++iLoc )
+                localSum += Pow( Abs(ALoc(iLoc,jLoc)), p );
+        const Real sum = mpi::AllReduce( localSum, A.DistComm() );
+        norm = Pow( sum, 1/p );
+    }
+    mpi::Broadcast( norm, A.Root(), A.CrossComm() );
+    return norm;
+}
+
+#ifdef TOM_SAYS_STAY
+
+template<typename Field>
 Base<Field> EntrywiseNorm( const SparseMatrix<Field>& A, Base<Field> p )
 {
     EL_DEBUG_CSE
@@ -117,28 +141,6 @@ Base<Field> SymmetricEntrywiseNorm
 {
     EL_DEBUG_CSE
     return HermitianEntrywiseNorm( uplo, A, p );
-}
-
-template<typename Field>
-Base<Field> EntrywiseNorm( const AbstractDistMatrix<Field>& A, Base<Field> p )
-{
-    EL_DEBUG_CSE
-    typedef Base<Field> Real;
-    Real norm;
-    if( A.Participating() )
-    {
-        Real localSum = 0;
-        const Int localHeight = A.LocalHeight();
-        const Int localWidth = A.LocalWidth();
-        const Matrix<Field>& ALoc = A.LockedMatrix();
-        for( Int jLoc=0; jLoc<localWidth; ++jLoc )
-            for( Int iLoc=0; iLoc<localHeight; ++iLoc )
-                localSum += Pow( Abs(ALoc(iLoc,jLoc)), p );
-        const Real sum = mpi::AllReduce( localSum, A.DistComm() );
-        norm = Pow( sum, 1/p );
-    }
-    mpi::Broadcast( norm, A.Root(), A.CrossComm() );
-    return norm;
 }
 
 template<typename Field>
@@ -267,10 +269,15 @@ Base<Field> SymmetricEntrywiseNorm
     return HermitianEntrywiseNorm( uplo, A, p );
 }
 
+#endif /* TOM_SAYS_STAY */
+
 #define PROTO(Field) \
   template Base<Field> EntrywiseNorm( const Matrix<Field>& A, Base<Field> p ); \
   template Base<Field> \
-  EntrywiseNorm( const AbstractDistMatrix<Field>& A, Base<Field> p ); \
+  EntrywiseNorm( const AbstractDistMatrix<Field>& A, Base<Field> p );
+
+#ifdef TOM_SAYS_STAY
+                                                \
   template Base<Field> \
   EntrywiseNorm( const SparseMatrix<Field>& A, Base<Field> p ); \
   template Base<Field> \
@@ -293,6 +300,8 @@ Base<Field> SymmetricEntrywiseNorm
   ( UpperOrLower uplo, const SparseMatrix<Field>& A, Base<Field> p ); \
   template Base<Field> SymmetricEntrywiseNorm \
   ( UpperOrLower uplo, const DistSparseMatrix<Field>& A, Base<Field> p );
+
+#endif /* TOM_SAYS_STAY */
 
 #define EL_NO_INT_PROTO
 #define EL_ENABLE_DOUBLEDOUBLE

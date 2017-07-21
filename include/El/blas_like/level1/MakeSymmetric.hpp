@@ -72,6 +72,8 @@ void MakeSymmetric
         AxpyTrapezoid( LOWER, T(1), *ATrans, A, -1 );
 }
 
+#ifdef TOM_SAYS_STAY
+
 template<typename T>
 void MakeSymmetric( UpperOrLower uplo, SparseMatrix<T>& A, bool conjugate )
 {
@@ -176,6 +178,8 @@ void MakeSymmetric( UpperOrLower uplo, DistSparseMatrix<T>& A, bool conjugate )
     A.ProcessQueues();
 }
 
+#endif /* TOM_SAYS_STAY */
+
 template<typename T>
 void MakeHermitian( UpperOrLower uplo, Matrix<T>& A )
 {
@@ -189,6 +193,8 @@ void MakeHermitian( UpperOrLower uplo, ElementalMatrix<T>& A )
     EL_DEBUG_CSE
     MakeSymmetric( uplo, A, true );
 }
+
+#ifdef TOM_SAYS_STAY
 
 template<typename T>
 void MakeHermitian( UpperOrLower uplo, SparseMatrix<T>& A )
@@ -204,6 +210,8 @@ void MakeHermitian( UpperOrLower uplo, DistSparseMatrix<T>& A )
     MakeSymmetric( uplo, A, true );
 }
 
+#endif /* TOM_SAYS_STAY */
+
 #ifdef EL_INSTANTIATE_BLAS_LEVEL1
 # define EL_EXTERN
 #else
@@ -215,18 +223,21 @@ void MakeHermitian( UpperOrLower uplo, DistSparseMatrix<T>& A )
   ( UpperOrLower uplo, Matrix<T>& A, bool conjugate ); \
   EL_EXTERN template void MakeSymmetric \
   ( UpperOrLower uplo, ElementalMatrix<T>& A, bool conjugate ); \
+  EL_EXTERN template void MakeHermitian \
+  ( UpperOrLower uplo, Matrix<T>& A ); \
+  EL_EXTERN template void MakeHermitian \
+  ( UpperOrLower uplo, ElementalMatrix<T>& A );
+
+#ifdef TOM_SAYS_STAY
   EL_EXTERN template void MakeSymmetric \
   ( UpperOrLower uplo, SparseMatrix<T>& A, bool conjugate ); \
   EL_EXTERN template void MakeSymmetric \
   ( UpperOrLower uplo, DistSparseMatrix<T>& A, bool conjugate ); \
   EL_EXTERN template void MakeHermitian \
-  ( UpperOrLower uplo, Matrix<T>& A ); \
-  EL_EXTERN template void MakeHermitian \
-  ( UpperOrLower uplo, ElementalMatrix<T>& A ); \
-  EL_EXTERN template void MakeHermitian \
   ( UpperOrLower uplo, SparseMatrix<T>& A ); \
   EL_EXTERN template void MakeHermitian \
   ( UpperOrLower uplo, DistSparseMatrix<T>& A );
+#endif /* TOM_SAYS_STAY */
 
 #define EL_ENABLE_DOUBLEDOUBLE
 #define EL_ENABLE_QUADDOUBLE

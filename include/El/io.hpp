@@ -2,8 +2,8 @@
    Copyright (c) 2009-2016, Jack Poulson
    All rights reserved.
 
-   This file is part of Elemental and is under the BSD 2-Clause License, 
-   which can be found in the LICENSE file in the root directory, or at 
+   This file is part of Elemental and is under the BSD 2-Clause License,
+   which can be found in the LICENSE file in the root directory, or at
    http://opensource.org/licenses/BSD-2-Clause
 */
 #ifndef EL_IO_HPP
@@ -11,12 +11,14 @@
 
 namespace El {
 
-const char* QtImageFormat( FileFormat format );
 string FileExtension( FileFormat format );
-FileFormat FormatFromExtension( const string ext );
 FileFormat DetectFormat( const string filename );
-
 std::ifstream::pos_type FileSize( std::ifstream& file );
+
+#ifdef TOM_SAYS_STAY
+
+const char* QtImageFormat( FileFormat format );
+FileFormat FormatFromExtension( const string ext );
 
 // TODO: Many more color maps
 namespace ColorMapNS {
@@ -72,6 +74,8 @@ namespace ldl { struct DistNodeInfo; }
 void DisplayLocal
 ( const ldl::DistNodeInfo& info, bool beforeFact, string title="" );
 
+#endif /* TOM_SAYS_STAY */
+
 // Print
 // =====
 
@@ -82,6 +86,9 @@ void Print( const Matrix<T>& A, string title="Matrix", ostream& os=cout );
 template<typename T>
 void Print
 ( const AbstractDistMatrix<T>& A, string title="DistMatrix", ostream& os=cout );
+
+#ifdef TOM_SAYS_STAY
+
 template<typename T>
 void Print
 ( const DistMultiVec<T>& X, string title="DistMultiVec", ostream& os=cout );
@@ -111,14 +118,18 @@ void PrintLocal
 template<typename T>
 void Print( const vector<T>& x, string title="vector", ostream& os=cout );
 
+#endif /* TOM_SAYS_STAY */
+
 // Read
 // ====
 template<typename T>
 void Read( Matrix<T>& A, const string filename, FileFormat format=AUTO );
 template<typename T>
 void Read
-( AbstractDistMatrix<T>& A, 
+( AbstractDistMatrix<T>& A,
   const string filename, FileFormat format=AUTO, bool sequential=false );
+
+#ifdef TOM_SAYS_STAY
 
 template<typename T>
 void Read
@@ -134,6 +145,8 @@ void Spy( const Matrix<T>& A, string title="Matrix", Base<T> tol=0 );
 template<typename T>
 void Spy
 ( const AbstractDistMatrix<T>& A, string title="DistMatrix", Base<T> tol=0 );
+
+#endif /* TOM_SAYS_STAY */
 
 // Write
 // =====

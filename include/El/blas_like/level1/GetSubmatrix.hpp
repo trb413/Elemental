@@ -39,6 +39,8 @@ void GetSubmatrix
     Copy( *ASubView, ASub );
 }
 
+#ifdef TOM_SAYS_STAY
+
 template<typename T>
 void GetSubmatrix
 ( const SparseMatrix<T>& A,
@@ -260,6 +262,8 @@ void GetSubmatrix
     }
     ASub.ProcessQueues();
 }
+
+#endif /* TOM_SAYS_STAY */
 
 // Non-contiguous
 // ==============
@@ -511,6 +515,8 @@ void GetSubmatrix
     ASub.ProcessQueues();
 }
 
+#ifdef TOM_SAYS_STAY
+
 template<typename T>
 void GetSubmatrix
 ( const DistMultiVec<T>& A,
@@ -547,6 +553,8 @@ void GetSubmatrix
     LogicError("This routine is not yet written");
 }
 
+#endif /* TOM_SAYS_STAY */
+
 #ifdef EL_INSTANTIATE_BLAS_LEVEL1
 # define EL_EXTERN
 #else
@@ -564,51 +572,6 @@ void GetSubmatrix
           Range<Int> I, \
           Range<Int> J, \
           ElementalMatrix<T>& ASub ); \
-  EL_EXTERN template void GetSubmatrix \
-  ( const SparseMatrix<T>& A, \
-          Range<Int> I, \
-          Range<Int> J, \
-          SparseMatrix<T>& ASub ); \
-  EL_EXTERN template void GetSubmatrix \
-  ( const SparseMatrix<T>& A, \
-          Range<Int> I, \
-    const vector<Int>& J, \
-          SparseMatrix<T>& ASub ); \
-  EL_EXTERN template void GetSubmatrix \
-  ( const SparseMatrix<T>& A, \
-    const vector<Int>& I, \
-          Range<Int> J, \
-          SparseMatrix<T>& ASub ); \
-  EL_EXTERN template void GetSubmatrix \
-  ( const SparseMatrix<T>& A, \
-    const vector<Int>& I, \
-    const vector<Int>& J, \
-          SparseMatrix<T>& ASub ); \
-  EL_EXTERN template void GetSubmatrix \
-  ( const DistSparseMatrix<T>& A, \
-          Range<Int> I, \
-          Range<Int> J, \
-          DistSparseMatrix<T>& ASub ); \
-  EL_EXTERN template void GetSubmatrix \
-  ( const DistSparseMatrix<T>& A, \
-          Range<Int> I, \
-    const vector<Int>& J, \
-          DistSparseMatrix<T>& ASub ); \
-  EL_EXTERN template void GetSubmatrix \
-  ( const DistSparseMatrix<T>& A, \
-    const vector<Int>& I, \
-          Range<Int> J, \
-          DistSparseMatrix<T>& ASub ); \
-  EL_EXTERN template void GetSubmatrix \
-  ( const DistSparseMatrix<T>& A, \
-    const vector<Int>& I, \
-    const vector<Int>& J, \
-          DistSparseMatrix<T>& ASub ); \
-  EL_EXTERN template void GetSubmatrix \
-  ( const DistMultiVec<T>& A, \
-          Range<Int> I, \
-          Range<Int> J, \
-          DistMultiVec<T>& ASub ); \
   EL_EXTERN template void GetSubmatrix \
   ( const Matrix<T>& A, \
     const Range<Int> I, \
@@ -638,7 +601,55 @@ void GetSubmatrix
   ( const AbstractDistMatrix<T>& A, \
     const vector<Int>& I, \
     const vector<Int>& J, \
-          AbstractDistMatrix<T>& ASub ); \
+          AbstractDistMatrix<T>& ASub );
+
+#ifdef TOM_SAYS_STAY
+
+  EL_EXTERN template void GetSubmatrix \
+  ( const SparseMatrix<T>& A, \
+          Range<Int> I, \
+          Range<Int> J, \
+          SparseMatrix<T>& ASub ); \
+  EL_EXTERN template void GetSubmatrix \
+  ( const SparseMatrix<T>& A, \
+          Range<Int> I, \
+    const vector<Int>& J, \
+          SparseMatrix<T>& ASub ); \
+  EL_EXTERN template void GetSubmatrix \
+  ( const SparseMatrix<T>& A, \
+    const vector<Int>& I, \
+          Range<Int> J, \
+          SparseMatrix<T>& ASub ); \
+  EL_EXTERN template void GetSubmatrix \
+  ( const SparseMatrix<T>& A, \
+    const vector<Int>& I, \
+    const vector<Int>& J, \
+          SparseMatrix<T>& ASub ); \
+  EL_EXTERN template void GetSubmatrix \
+  ( const DistSparseMatrix<T>& A, \
+          Range<Int> I, \
+          Range<Int> J, \
+          DistSparseMatrix<T>& ASub ); \
+  EL_EXTERN template void GetSubmatrix \
+  ( const DistSparseMatrix<T>& A, \
+          Range<Int> I, \
+    const vector<Int>& J, \
+          DistSparseMatrix<T>& ASub ); \
+  EL_EXTERN template void GetSubmatrix \
+  ( const DistSparseMatrix<T>& A, \
+    const vector<Int>& I, \
+          Range<Int> J, \
+          DistSparseMatrix<T>& ASub ); \
+  EL_EXTERN template void GetSubmatrix \
+  ( const DistSparseMatrix<T>& A, \
+    const vector<Int>& I, \
+    const vector<Int>& J, \
+          DistSparseMatrix<T>& ASub ); \
+  EL_EXTERN template void GetSubmatrix \
+  ( const DistMultiVec<T>& A, \
+          Range<Int> I, \
+          Range<Int> J, \
+          DistMultiVec<T>& ASub ); \
   EL_EXTERN template void GetSubmatrix \
   ( const DistMultiVec<T>& A, \
           Range<Int> I, \
@@ -654,6 +665,9 @@ void GetSubmatrix
     const vector<Int>& I, \
     const vector<Int>& J, \
           DistMultiVec<T>& ASub );
+
+#endif /* TOM_SAYS_STAY */
+
 
 #define EL_ENABLE_DOUBLEDOUBLE
 #define EL_ENABLE_QUADDOUBLE

@@ -624,6 +624,7 @@ install(FILES
 # ==================
 include(CTest)
 
+if (TOM_SAYS_STAY)
 # Sandbox test
 # ------------
 install(FILES "${PROJECT_SOURCE_DIR}/sandbox/Makefile"
@@ -641,6 +642,7 @@ set_target_properties(sandbox-test PROPERTIES
 if(EL_LINK_FLAGS)
   set_target_properties(sandbox-test PROPERTIES LINK_FLAGS ${EL_LINK_FLAGS})
 endif()
+endif (TOM_SAYS_STAY)
 
 # Test drivers
 # ------------

@@ -11,11 +11,13 @@
 
 namespace El {
 
+#ifdef TOM_SAYS_STAY
 template<typename T> void SetLocalTrrkBlocksize( Int blocksize );
 template<typename T> Int LocalTrrkBlocksize();
 
 template<typename T> void SetLocalTrr2kBlocksize( Int blocksize );
 template<typename T> Int LocalTrr2kBlocksize();
+#endif /* TOM_SAYS_STAY */
 
 // Gemm
 // ====
@@ -57,6 +59,7 @@ void Gemm
   T alpha, const AbstractDistMatrix<T>& A, const AbstractDistMatrix<T>& B,
                  AbstractDistMatrix<T>& C, GemmAlgorithm alg=GEMM_DEFAULT );
 
+#ifdef TOM_SAYS_STAY
 template<typename T>
 void LocalGemm
 ( Orientation orientA, Orientation orientB,
@@ -653,6 +656,7 @@ void NormalFromEVD
   const AbstractDistMatrix<Complex<Real>>& w,
   const AbstractDistMatrix<Complex<Real>>& Z );
 
+#endif /* TOM_SAYS_STAY */
 } // namespace El
 
 #endif // ifndef EL_BLAS3_HPP

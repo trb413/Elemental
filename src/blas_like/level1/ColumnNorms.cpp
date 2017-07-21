@@ -129,6 +129,8 @@ void ColumnMaxNorms
     AllReduce( norms.Matrix(), A.ColComm(), mpi::MAX );
 }
 
+#ifdef TOM_SAYS_STAY
+
 template<typename Field>
 void ColumnTwoNorms( const DistMultiVec<Field>& X, Matrix<Base<Field>>& norms )
 {
@@ -294,6 +296,8 @@ void ColumnMaxNorms
     }
 }
 
+#endif /* TOM_SAYS_STAY */
+
 // Versions which operate on explicitly-separated complex matrices
 // ===============================================================
 template<typename Real,typename>
@@ -341,6 +345,8 @@ void ColumnTwoNorms
       XReal.ColComm() );
 }
 
+#ifdef TOM_SAYS_STAY
+
 template<typename Real,typename>
 void ColumnTwoNorms
 ( const DistMultiVec<Real>& XReal,
@@ -360,6 +366,8 @@ void ColumnTwoNorms
       norms,
       XReal.Grid().Comm() );
 }
+
+#endif /* TOM_SAYS_STAY */
 
 #define PROTO_DIST(Field,U,V) \
   template void ColumnTwoNorms \
@@ -382,24 +390,6 @@ void ColumnTwoNorms
   template void ColumnMaxNorms \
   ( const Matrix<Field>& X, \
           Matrix<Base<Field>>& norms ); \
-  template void ColumnTwoNorms \
-  ( const SparseMatrix<Field>& A, \
-          Matrix<Base<Field>>& norms ); \
-  template void ColumnMaxNorms \
-  ( const SparseMatrix<Field>& A, \
-          Matrix<Base<Field>>& norms ); \
-  template void ColumnTwoNorms \
-  ( const DistSparseMatrix<Field>& A, \
-          DistMultiVec<Base<Field>>& norms ); \
-  template void ColumnMaxNorms \
-  ( const DistSparseMatrix<Field>& A, \
-          DistMultiVec<Base<Field>>& norms ); \
-  template void ColumnTwoNorms \
-  ( const DistMultiVec<Field>& X, \
-          Matrix<Base<Field>>& norms ); \
-  template void ColumnMaxNorms \
-  ( const DistMultiVec<Field>& X, \
-          Matrix<Base<Field>>& norms ); \
   PROTO_DIST(Field,MC,  MR  ) \
   PROTO_DIST(Field,MC,  STAR) \
   PROTO_DIST(Field,MD,  STAR) \
@@ -414,6 +404,37 @@ void ColumnTwoNorms
   PROTO_DIST(Field,VC,  STAR) \
   PROTO_DIST(Field,VR,  STAR)
 
+
+#ifdef TOM_SAYS_STAY
+
+  template void ColumnTwoNorms \
+  ( const SparseMatrix<Field>& A, \
+          Matrix<Base<Field>>& norms ); \
+  template void ColumnMaxNorms \
+  ( const SparseMatrix<Field>& A, \
+          Matrix<Base<Field>>& norms ); \
+  template void ColumnTwoNorms \
+  ( const DistSparseMatrix<Field>& A, \
+          DistMultiVec<Base<Field>>& norms ); \
+  template void ColumnMaxNorms \
+  ( const DistSparseMatrix<Field>& A, \
+          DistMultiVec<Base<Field>>& norms ); \
+  template void ColumnTwoNorms \
+  ( const DistMultiVec<Field>& X, \
+          Matrix<Base<Field>>& norms ); \
+  template void ColumnMaxNorms \
+  ( const DistMultiVec<Field>& X, \
+          Matrix<Base<Field>>& norms ); \
+
+
+  template void ColumnTwoNorms \
+  ( const DistMultiVec<Real>& XReal, \
+    const DistMultiVec<Real>& XImag, \
+          Matrix<Real>& norms ); \
+
+#endif /* TOM_SAYS_STAY */
+
+
 #define PROTO_REAL_DIST(Real,U,V) \
   template void ColumnTwoNorms \
   ( const DistMatrix<Real,U,V>& XReal, \
@@ -425,10 +446,6 @@ void ColumnTwoNorms
   template void ColumnTwoNorms \
   ( const Matrix<Real>& XReal, \
     const Matrix<Real>& XImag, \
-          Matrix<Real>& norms ); \
-  template void ColumnTwoNorms \
-  ( const DistMultiVec<Real>& XReal, \
-    const DistMultiVec<Real>& XImag, \
           Matrix<Real>& norms ); \
   PROTO_REAL_DIST(Real,MC,  MR  ) \
   PROTO_REAL_DIST(Real,MC,  STAR) \

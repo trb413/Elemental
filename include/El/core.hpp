@@ -231,9 +231,9 @@ template<typename T> struct IsStdField<Complex<T>>
 // Declare the intertwined core parts of our library
 #include <El/core/imports/valgrind.hpp>
 #include <El/core/imports/omp.hpp>
-#include <El/core/imports/qd.hpp>
+//#include <El/core/imports/qd.hpp>
 #include <El/core/imports/mpfr.hpp>
-#include <El/core/imports/qt5.hpp>
+//#include <El/core/imports/qt5.hpp>
 
 #include <El/core/Element/decl.hpp>
 #include <El/core/Serialize.hpp>
@@ -246,11 +246,11 @@ template<typename T> struct IsStdField<Complex<T>>
 #include <El/core/indexing/decl.hpp>
 #include <El/core/imports/blas.hpp>
 #include <El/core/imports/lapack.hpp>
-#include <El/core/imports/flame.hpp>
-#include <El/core/imports/mkl.hpp>
-#include <El/core/imports/openblas.hpp>
-#include <El/core/imports/pmrrr.hpp>
-#include <El/core/imports/scalapack.hpp>
+//#include <El/core/imports/flame.hpp>
+//#include <El/core/imports/mkl.hpp>
+//#include <El/core/imports/openblas.hpp>
+//#include <El/core/imports/pmrrr.hpp>
+//#include <El/core/imports/scalapack.hpp>
 
 #include <El/core/limits.hpp>
 
@@ -271,12 +271,12 @@ class DistMatrix;
 } // namespace El
 
 #include <El/core/Matrix/decl.hpp>
-#include <El/core/Graph/decl.hpp>
-#include <El/core/DistMap/decl.hpp>
-#include <El/core/DistGraph/decl.hpp>
-#include <El/core/SparseMatrix/decl.hpp>
-#include <El/core/DistSparseMatrix/decl.hpp>
-#include <El/core/DistMultiVec/decl.hpp>
+//#include <El/core/Graph/decl.hpp>
+//#include <El/core/DistMap/decl.hpp>
+//#include <El/core/DistGraph/decl.hpp>
+//#include <El/core/SparseMatrix/decl.hpp>
+//#include <El/core/DistSparseMatrix/decl.hpp>
+//#include <El/core/DistMultiVec/decl.hpp>
 #include <El/core/View/decl.hpp>
 #include <El/blas_like/level1/decl.hpp>
 
@@ -293,19 +293,19 @@ class DistMatrix;
 // Declare and implement the decoupled parts of the core of the library
 // (perhaps these should be moved into their own directory?)
 #include <El/core/View/impl.hpp>
-#include <El/core/FlamePart.hpp>
+//#include <El/core/FlamePart.hpp>
 #include <El/core/random/decl.hpp>
 #include <El/core/random/impl.hpp>
 
 // TODO: Sequential map
-//#include <El/core/Map.hpp>
-#include <El/core/SparseMatrix/impl.hpp>
+////#include <El/core/Map.hpp>
+//#include <El/core/SparseMatrix/impl.hpp>
 
-#include <El/core/DistMap.hpp>
-#include <El/core/DistMultiVec/impl.hpp>
-#include <El/core/DistSparseMatrix/impl.hpp>
+//#include <El/core/DistMap.hpp>
+//#include <El/core/DistMultiVec/impl.hpp>
+//#include <El/core/DistSparseMatrix/impl.hpp>
 
-#include <El/core/Permutation.hpp>
-#include <El/core/DistPermutation.hpp>
+//#include <El/core/Permutation.hpp>
+//#include <El/core/DistPermutation.hpp>
 
 #endif // ifndef EL_CORE_HPP

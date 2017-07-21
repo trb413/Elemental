@@ -44,6 +44,8 @@ void Zero( AbstractDistMatrix<T>& A )
     Zero( A.Matrix() );
 }
 
+#ifdef TOM_SAYS_STAY
+
 template<typename T>
 void Zero( SparseMatrix<T>& A, bool clearMemory )
 {
@@ -70,7 +72,7 @@ void Zero( DistMultiVec<T>& X )
     EL_DEBUG_CSE
     Zero( X.Matrix() );
 }
-
+#endif /* TOM_SAYS_STAY */
 #ifdef EL_INSTANTIATE_BLAS_LEVEL1
 # define EL_EXTERN
 #else
@@ -79,10 +81,14 @@ void Zero( DistMultiVec<T>& X )
 
 #define PROTO(T) \
   EL_EXTERN template void Zero( Matrix<T>& A ); \
-  EL_EXTERN template void Zero( AbstractDistMatrix<T>& A ); \
+  EL_EXTERN template void Zero( AbstractDistMatrix<T>& A );
+
+#ifdef TOM_SAYS_STAY
+                                                                        \
   EL_EXTERN template void Zero( SparseMatrix<T>& A, bool clearMemory ); \
   EL_EXTERN template void Zero( DistSparseMatrix<T>& A, bool clearMemory ); \
   EL_EXTERN template void Zero( DistMultiVec<T>& A );
+#endif /* TOM_SAYS_STAY */
 
 #define EL_ENABLE_DOUBLEDOUBLE
 #define EL_ENABLE_QUADDOUBLE

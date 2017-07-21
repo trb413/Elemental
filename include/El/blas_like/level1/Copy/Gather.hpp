@@ -165,18 +165,18 @@ void Gather
             {
                 const Int jBefore = rowShift*nb - rowCut;
                 const Int jLocAdj = ( rowShift==0 ? jLoc+rowCut : jLoc );
-                const Int numFilledLocalBlocks = jLocAdj / nb;
-                const Int jMid = numFilledLocalBlocks*nb*rowStride;
-                const Int jPost = jLocAdj-numFilledLocalBlocks*nb;
+                const Int jnumFilledLocalBlocks = jLocAdj / nb;
+                const Int jMid = jnumFilledLocalBlocks*nb*rowStride;
+                const Int jPost = jLocAdj-jnumFilledLocalBlocks*nb;
                 const Int j = jBefore + jMid + jPost;
                 const T* sourceCol = &data[jLoc*localHeight];
                 for( Int iLoc=0; iLoc<localHeight; ++iLoc )
                 {
                     const Int iBefore = colShift*mb - colCut;
                     const Int iLocAdj = (colShift==0 ? iLoc+colCut : iLoc);
-                    const Int numFilledLocalBlocks = iLocAdj / mb;
-                    const Int iMid = numFilledLocalBlocks*mb*colStride;
-                    const Int iPost = iLocAdj-numFilledLocalBlocks*mb;
+                    const Int inumFilledLocalBlocks = iLocAdj / mb;
+                    const Int iMid = inumFilledLocalBlocks*mb*colStride;
+                    const Int iPost = iLocAdj-inumFilledLocalBlocks*mb;
                     const Int i = iBefore + iMid + iPost;
                     B.SetLocal(i,j,sourceCol[iLoc]);
                 }

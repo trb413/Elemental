@@ -89,6 +89,9 @@ void Diagonal( AbstractDistMatrix<S>& D, const AbstractDistMatrix<T>& d )
     D.ProcessQueues();
 }
 
+
+# ifdef TOM_SAYS_STAY
+
 template<typename S,typename T>
 void Diagonal( SparseMatrix<S>& D, const Matrix<T>& d )
 {
@@ -122,15 +125,22 @@ void Diagonal( DistSparseMatrix<S>& D, const DistMultiVec<T>& d )
     D.ProcessQueues();
 }
 
+#endif /* TOM_SAYS_STAY */
+
 #define PROTO_TYPES(S,T) \
   template void Diagonal( Matrix<S>& D, const vector<T>& d ); \
   template void Diagonal( Matrix<S>& D, const Matrix<T>& d ); \
   template void Diagonal( AbstractDistMatrix<S>& D, const vector<T>& d ); \
   template void Diagonal( AbstractDistMatrix<S>& D, const Matrix<T>& d ); \
   template void Diagonal \
-  ( AbstractDistMatrix<S>& D, const AbstractDistMatrix<T>& d ); \
+  ( AbstractDistMatrix<S>& D, const AbstractDistMatrix<T>& d );
+
+#ifdef TOM_SAYS_STAY
+                                                                        \
   template void Diagonal( SparseMatrix<S>& A, const Matrix<T>& d ); \
   template void Diagonal( DistSparseMatrix<S>& A, const DistMultiVec<T>& d );
+
+#endif /* TOM_SAYS_STAY */
 
 #define PROTO_INT(S) PROTO_TYPES(S,S)
 

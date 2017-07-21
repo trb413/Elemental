@@ -83,7 +83,7 @@ void Transpose( const Matrix<T>& A, Matrix<T>& B, bool conjugate )
 #else
     // OpenBLAS's {i,o}matcopy routines where disabled for the reasons detailed
     // in src/core/imports/openblas.cpp
-    
+
     // Blocked matrix transpose
     // Note: block size should be a multiple of cache line size and
     // should be small enough to fit in L1 cache. On recent Intel
@@ -297,6 +297,8 @@ void Transpose
     }
 }
 
+#ifdef TOM_SAYS_STAY
+
 template<typename T>
 void Transpose
 ( const SparseMatrix<T>& A, SparseMatrix<T>& B, bool conjugate )
@@ -362,6 +364,8 @@ void Adjoint( const DistSparseMatrix<T>& A, DistSparseMatrix<T>& B )
     Transpose( A, B, true );
 }
 
+#endif /* TOM_SAYS_STAY */
+
 #ifdef EL_INSTANTIATE_BLAS_LEVEL1
 # define EL_EXTERN
 #else
@@ -377,7 +381,11 @@ void Adjoint( const DistSparseMatrix<T>& A, DistSparseMatrix<T>& B )
   ( const BlockMatrix<T>& A, BlockMatrix<T>& B, bool conjugate ); \
   EL_EXTERN template void Transpose \
   ( const AbstractDistMatrix<T>& A, \
-          AbstractDistMatrix<T>& B, bool conjugate ); \
+          AbstractDistMatrix<T>& B, bool conjugate );
+
+
+#ifdef TOM_SAYS_STAY
+                                                \
   EL_EXTERN template void Transpose \
   ( const SparseMatrix<T>& A, SparseMatrix<T>& B, bool conjugate ); \
   EL_EXTERN template void Transpose \
@@ -395,6 +403,8 @@ void Adjoint( const DistSparseMatrix<T>& A, DistSparseMatrix<T>& B )
   ( const SparseMatrix<T>& A, SparseMatrix<T>& B ); \
   EL_EXTERN template void Adjoint \
   ( const DistSparseMatrix<T>& A, DistSparseMatrix<T>& B );
+
+#endif /* TOM_SAYS_STAY */
 
 #define EL_ENABLE_DOUBLEDOUBLE
 #define EL_ENABLE_QUADDOUBLE

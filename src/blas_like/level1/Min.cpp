@@ -2,8 +2,8 @@
    Copyright (c) 2009-2016, Jack Poulson
    All rights reserved.
 
-   This file is part of Elemental and is under the BSD 2-Clause License, 
-   which can be found in the LICENSE file in the root directory, or at 
+   This file is part of Elemental and is under the BSD 2-Clause License,
+   which can be found in the LICENSE file in the root directory, or at
    http://opensource.org/licenses/BSD-2-Clause
 */
 #include <El-lite.hpp>
@@ -55,6 +55,8 @@ Real Min( const AbstractDistMatrix<Real>& A )
     return value;
 }
 
+#ifdef TOM_SAYS_STAY
+
 template<typename Real,
          typename/*=EnableIf<IsReal<Real>>*/>
 Real SymmetricMin( UpperOrLower uplo, const Matrix<Real>& A )
@@ -77,7 +79,7 @@ Real SymmetricMin( UpperOrLower uplo, const Matrix<Real>& A )
     }
     else
     {
-        for( Int j=0; j<n; ++j ) 
+        for( Int j=0; j<n; ++j )
             for( Int i=0; i<=j; ++i )
                 value = Min(value,ABuf[i+j*ALDim]);
     }
@@ -129,12 +131,19 @@ Real SymmetricMin( UpperOrLower uplo, const AbstractDistMatrix<Real>& A )
     return value;
 }
 
+#endif /* TOM_SAYS_STAY */
+
 #define PROTO(Real) \
   template Real Min( const Matrix<Real>& x ); \
-  template Real Min( const AbstractDistMatrix<Real>& x ); \
+  template Real Min( const AbstractDistMatrix<Real>& x );
+
+#ifdef TOM_SAYS_STAY
+                                                                        \
   template Real SymmetricMin( UpperOrLower uplo, const Matrix<Real>& A ); \
   template Real SymmetricMin \
   ( UpperOrLower uplo, const AbstractDistMatrix<Real>& A );
+
+#endif /* TOM_SAYS_STAY */
 
 #define EL_NO_COMPLEX_PROTO
 #define EL_ENABLE_DOUBLEDOUBLE

@@ -232,6 +232,8 @@ void MatrixMarket( AbstractDistMatrix<T>& A, const string filename )
     Copy( A_CIRC_CIRC, A );
 }
 
+#ifdef TOM_SAYS_STAY
+
 template<typename T>
 void MatrixMarket( SparseMatrix<T>& A, const string filename )
 {
@@ -580,6 +582,8 @@ void MatrixMarket( DistSparseMatrix<T>& A, const string filename )
         ScaleTrapezoid( T(-1), UPPER, A, 1 );
     }
 }
+
+#endif /* TOM_SAYS_STAY */
 
 } // namespace read
 } // namespace El

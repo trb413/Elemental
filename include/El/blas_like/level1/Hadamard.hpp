@@ -96,6 +96,8 @@ void Hadamard
     Hadamard( A.LockedMatrix(), B.LockedMatrix(), C.Matrix() );
 }
 
+#ifdef TOM_SAYS_STAY
+
 template<typename T>
 void Hadamard
 ( const DistMultiVec<T>& A, const DistMultiVec<T>& B, DistMultiVec<T>& C )
@@ -107,6 +109,8 @@ void Hadamard
     C.Resize( A.Height(), A.Width() );
     Hadamard( A.LockedMatrix(), B.LockedMatrix(), C.Matrix() );
 }
+
+#endif /* TOM_SAYS_STAY */
 
 #ifdef EL_INSTANTIATE_BLAS_LEVEL1
 # define EL_EXTERN
@@ -120,11 +124,16 @@ void Hadamard
   EL_EXTERN template void Hadamard \
   ( const AbstractDistMatrix<T>& A, \
     const AbstractDistMatrix<T>& B, \
-          AbstractDistMatrix<T>& C ); \
+          AbstractDistMatrix<T>& C );
+
+#ifdef TOM_SAYS_STAY
+                                                \
   EL_EXTERN template void Hadamard \
   ( const DistMultiVec<T>& A, \
     const DistMultiVec<T>& B, \
           DistMultiVec<T>& C );
+
+#endif /* TOM_SAYS_STAY */
 
 #define EL_ENABLE_DOUBLEDOUBLE
 #define EL_ENABLE_QUADDOUBLE

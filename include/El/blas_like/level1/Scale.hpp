@@ -94,6 +94,8 @@ void Scale( S alpha, AbstractDistMatrix<Real>& AReal,
     Scale( alpha, AReal.Matrix(), AImag.Matrix() );
 }
 
+#ifdef TOM_SAYS_STAY
+
 template<typename T,typename S>
 void Scale( S alpha, SparseMatrix<T>& A )
 {
@@ -143,6 +145,8 @@ void Scale( S alpha, DistMultiVec<T>& A )
     Scale( alpha, A.Matrix() );
 }
 
+#endif /* TOM_SAYS_STAY */
+
 #ifdef EL_INSTANTIATE_BLAS_LEVEL1
 # define EL_EXTERN
 #else
@@ -153,13 +157,17 @@ void Scale( S alpha, DistMultiVec<T>& A )
   EL_EXTERN template void Scale \
   ( T alpha, Matrix<T>& A ); \
   EL_EXTERN template void Scale \
-  ( T alpha, AbstractDistMatrix<T>& A ); \
+  ( T alpha, AbstractDistMatrix<T>& A );
+
+#ifdef TOM_SAYS_STAY
+                                                \
   EL_EXTERN template void Scale \
   ( T alpha, SparseMatrix<T>& A ); \
   EL_EXTERN template void Scale \
   ( T alpha, DistSparseMatrix<T>& A ); \
   EL_EXTERN template void Scale \
   ( T alpha, DistMultiVec<T>& A );
+#endif /* TOM_SAYS_STAY */
 
 #define EL_ENABLE_DOUBLEDOUBLE
 #define EL_ENABLE_QUADDOUBLE
